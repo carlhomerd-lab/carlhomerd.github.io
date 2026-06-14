@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mindanao College of Aeronautics Inc.</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      :root {
+        --primary: #001f3f;
+        --secondary: #0056b3;
+        --accent: #f8f9fa;
+        --sidebar-width: 160px;
+      }
+
+      * { 
+        box-sizing: border-box; 
+      }
+
+      body {
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        margin: 0;
+        color: var(--primary);
+        background-color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* Sidebar */
+      #sidebar {
+        width: var(--sidebar-width);
+        background: var(--primary);
+        position: fixed;
+        height: 100vh;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1000;
+      }
+
+      #sidebar.hidden { 
+        transform: translateX(-100%); 
+      }
+
+      .nav-link {
+        display: block;
+        color: #b0c4de;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 20px 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        position: relative;
+      }
+
+      .nav-link:hover { 
+        color: white; 
+        background: rgba(255,255,255,0.05); 
+      }
+
+      .nav-link.active { 
+        color: white; 
+        background: rgba(255,255,255,0.1); 
+      }
+
+      .nav-link.active::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: #ffffff;
+      }
+
+      /* Content Area */
+      main {
+        flex: 1;
+        margin-left: var(--sidebar-width);
+        transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      main.full { 
+        margin-left: 0; 
+      }
+
+      /* Sidebar Button */
+      #toggle-btn {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        background: white;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        padding: 8px;
+        cursor: pointer;
+        z-index: 1100;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        width: 45px;
+        height: 45px;
+      }
+
+      #toggle-btn:hover { 
+        background: var(--primary); 
+        color: white; 
+      }
+
+      #toggle-btn.shifted { 
+        left: 175px; 
+      }
+
+      header {
+        background: linear-gradient(rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 0.85)), url('https://res.cloudinary.com/dmpjxqinh/image/upload/q_auto/f_auto/v1779509658/IMG_6005_mlvzne.jpg');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 2.5rem 2rem;
+        text-align: center;
+      }
+
+      .logo {
+        max-width: 130px;
+        margin-bottom: 0.75rem;
+      }
+
+      .page { 
+        padding: 40px 20px; 
+        max-width: 760px; 
+        margin: auto; 
+        display: none; 
+      }
+
+      .page.active { 
+        display: block; 
+        animation: fadeIn 0.3s ease-in; 
+      }
+
+      @keyframes fadeIn { 
+        from { opacity: 0; } 
+        to { opacity: 1; } 
+      }
+
+      h2 { 
+        border-bottom: 3px solid var(--primary); 
+        padding-bottom: 10px; 
+        margin-top: 30px; 
+      }
+
+      .card { 
+        border: 1px solid #ddd; 
+        padding: 25px; 
+        margin-bottom: 20px; 
+        border-radius: 8px; 
+        background: var(--accent); 
+      }
+
+      .campus-section {
+        margin-bottom: 40px;
+      }
+
+      .clickable-card {
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .clickable-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      }
+
+      input, select {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      button {
+        background: var(--secondary);
+        color: white;
+        border: none;
+        padding: 14px;
+        width: 100%;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+
+      button:hover { 
+        background: var(--primary); 
+      }
+
+      /* Directory Styling */
+      .dir-grid { 
+        display: grid; 
+        gap: 15px; 
+      }
+
+      .dir-card { 
+        display: flex; 
+        align-items: center; 
+        gap: 15px; 
+        padding: 15px; 
+        border-bottom: 1px solid #eee; 
+      }
+
+      .dir-icon { 
+        background: var(--accent); 
+        padding: 10px; 
+        border-radius: 50%; 
+        color: var(--secondary); 
+      }
+
+      .dir-info h4 { 
+        margin: 0; 
+        color: var(--primary); 
+      }
+
+      .dir-info p { 
+        margin: 2px 0 0 0; 
+        font-size: 0.9rem; 
+        color: #666; 
+      }
+
+      .instructor-group { 
+        margin-top: 15px; 
+      }
+
+      .instructor-item { 
+        padding: 8px 0; 
+        border-bottom: 1px solid #eee; 
+        font-size: 0.9rem; 
+        font-weight: 500; 
+      }
+
+      /* Footer Improvement */
+      footer {
+        margin-left: var(--sidebar-width);
+        background: #001227;
+        color: #b0c4de;
+        padding: 50px 25px 30px 25px;
+        border-top: 4px solid var(--secondary);
+        transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      footer.full { 
+        margin-left: 0; 
+      }
+
+      .footer-content { 
+        display: flex; 
+        gap: 60px; 
+        flex-wrap: wrap; 
+        justify-content: center; 
+        margin-bottom: 30px; 
+      }
+
+      .footer-item { 
+        display: flex; 
+        align-items: center; 
+        gap: 12px; 
+        font-weight: 500; 
+        transition: color 0.3s ease; 
+      }
+
+      .footer-item:hover { 
+        color: #ffffff; 
+      }
+
+      .footer-item i { 
+        color: var(--secondary); 
+        width: 20px; 
+      }
+
+      .footer-copyright { 
+        border-top: 1px solid #002b5c; 
+        width: 100%; 
+        text-align: center; 
+        padding-top: 20px; 
+        font-size: 0.8rem; 
+        color: #5a7590; 
+      }
+
+      /* Portal Dashboard Specifics */
+      .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+      .admin-table th, .admin-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+        font-size: 0.9rem;
+      }
+      .admin-table th {
+        background-color: var(--primary);
+        color: white;
+      }
+
+      /* Spreadsheet Specific Input Modifications */
+      .spreadsheet-input {
+        width: 100%;
+        border: none;
+        background: transparent;
+        padding: 4px;
+        margin: 0;
+        font-size: 0.9rem;
+        font-family: inherit;
+        color: inherit;
+      }
+      .spreadsheet-input:focus {
+        background: #fff;
+        outline: 2px solid var(--secondary);
+        border-radius: 2px;
+      }
+      .delete-row-btn {
+        background: #dc3545;
+        padding: 6px 10px;
+        font-size: 0.8rem;
+        width: auto;
+        border-radius: 4px;
+      }
+
+      .discreet-link {
+        display: block;
+        text-align: center;
+        margin-top: 40px;
+        font-size: 0.75rem;
+        color: #aaa;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      .discreet-link:hover {
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="toggle-btn" onclick="toggleSidebar()">
+      <i data-lucide="menu"></i>
+    </button>
+
+    <nav id="sidebar" class="hidden">
+      <div style="padding-top: 70px;">
+        <a class="nav-link active" id="link-home" onclick="showPage('home', 'link-home')">Home</a>
+        <a class="nav-link" id="link-academics" onclick="showPage('academics', 'link-academics')">Academics</a>
+        <a class="nav-link" id="link-admissions" onclick="showPage('admissions', 'link-admissions')">Admissions</a>
+        <a class="nav-link" id="link-portal" onclick="showPage('portal', 'link-portal')">Student Portal</a>
+        <a class="nav-link" id="link-directory" onclick="showPage('directory', 'link-directory')">Directory</a>
+        <a class="nav-link" id="link-campus" onclick="showPage('campus', 'link-campus')">Campus & Community</a>
+      </div>
+    </nav>
+
+    <main id="main" class="full">
+      <header>
+        <img src="https://res.cloudinary.com/dmpjxqinh/image/upload/q_auto/f_auto/v1779550423/Untitled_design_2_ldqqns.png" alt="MCAI Logo" class="logo">
+        <h1>MINDANAO COLLEGE OF AERONAUTICS INC.</h1>
+        <p><em>"Motus Mens Manus"</em></p>
+      </header>
+
+      <div id="home" class="page active">
+        <h2>ABOUT MCAI</h2>
+        <p>The Mindanao College of Aeronautics Inc. (MCAI) is dedicated to producing world-class aviation professionals. Shaping Work, Mind, Hands, for future aviators. Located in the heart of Dipolog City, we provide rigorous technical training grounded in industry standards and hands-on experience.</p>
+        
+        <h2>VISION</h2>
+        <p>To be the leading aviation technical institution in the region, fostering innovation, safety, and excellence in aircraft maintenance technology.</p>
+        <img src="https://res.cloudinary.com/dmpjxqinh/image/upload/q_auto/f_auto/v1780680164/Gemini_Generated_Image_5gkt1f5gkt1f5gkt_iigmc6.png" alt="MCAI Future Vision Artwork" style="width: 100%; border-radius: 8px; margin-top: 10px; margin-bottom: 20px;">
+
+        <h2>CAAP ACCREDITATION</h2>
+        <p>Mindanao College of Aeronautics Inc. operates in full compliance with the standards set by the <strong>Civil Aviation Authority of the Philippines (CAAP)</strong>, under <strong>ATOC NO. 2024-006</strong>, ensuring all curriculum and training facilities meet national aviation safety and technical requirements. View the complete <a href="https://www.caap.gov.ph/wp-content/uploads/2026/01/List-of-Pilot-Maintenance-FOO-Schools-As-of-January-16-2026.pdf" target="_blank">list of authorized ATOC schools</a>.</p>
+
+        <h2>ACADEMIC PROGRAMS</h2>
+        <div class="card clickable-card" onclick="showPage('amt', 'link-academics')">
+          <h3><u>Aviation Maintenance Technology (AMT)</u></h3>
+          <p>A 2-year technical program focused on airframe and powerplant systems to prepare students for MRO careers.</p>
+        </div>
+        <div class="card clickable-card" onclick="showPage('avionics', 'link-home')">
+          <h3><u>Aviation Electronics Technology (Avionics)</u></h3>
+          <p>A specialized curriculum centered on navigation, communication, and modern aircraft electrical systems.</p>
+        </div>
+
+        <h2>ANNOUNCEMENTS</h2>
+        <div class="card" style="border-left: 5px solid var(--secondary);">
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 10px;"><strong>[March 2026]</strong> Philippine Air Force, 6th Air Reserve Center implements PAF-ROTC for National Service Training Program at Mindanao College of Aeronautics Inc.</li>
+            <div style="margin-top: 10px;">
+              <img src="https://res.cloudinary.com/dmpjxqinh/image/upload/q_auto/f_auto/v1780665216/IMG_2846_puwblh.jpg" alt="PAF Logo" style="width: 100px; height: 100px; object-fit: contain; margin-right: 15px;">
+              <img src="https://res.cloudinary.com/dmpjxqinh/image/upload/q_auto/f_auto/v1779510318/IMG_2467_rdecrc.png" alt="6th Air Reserve Center Logo" style="width: 100px; height: 100px; object-fit: contain;">
+            </div>
+            <li style="margin-top: 15px; margin-bottom: 10px;"><strong>[May 2026]</strong> Enrollment for the upcoming semester is now open.</li>
+            <li><strong>[April 2026]</strong> Campus facility upgrades completed.</li>
+          </ul>
+        </div>
+
+        <h2>NEWS</h2>
+        <p><strong>[June 2026]</strong> Regular classes for the 2026 academic year officially start on June 8, 2026.</p>
+        <hr>
+        <p><strong>[May 2026]</strong> Celebration of the 1st commencement exercise for the pioneering batch held on May 30, 2026.</p>
+        <img src="https://res.cloudinary.com/dmpjxqinh/image/upload/q_auto/f_auto/v1780664783/IMG_2899_ht2jsn.jpg" alt="Commencement Exercise" style="width: 100%; border-radius: 8px; margin-top: 10px;">
+      </div>
+
+      <div id="academics" class="page">
+        <h2>Aviation Maintenance Technology (AMT)</h2>
+        <p>This 2-year program prepares students for careers in aircraft maintenance, repair, and overhaul (MRO). The curriculum covers airframe, powerplant, and essential aviation safety protocols.</p>
+        <h3>Career Opportunities</h3>
+        <ul>
+          <li>Aircraft Maintenance Technician (Licensed/Non-licensed)</li>
+          <li>MRO Facility Maintenance Specialist</li>
+          <li>Aviation Ground Support Equipment Mechanic</li>
+          <li>Quality Control Inspector in Aviation</li>
+          <li>Aircraft Assembly Technician</li>
+        </ul>
+        
+        <div style="margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px;">
+          <h3>Aviation Maintenance Curriculum</h3>
+          <img src="https://res.cloudinary.com/dmpjxqinh/image/upload/q_auto/f_auto/v1779770547/Code_Generated_Image_h0jjb6.png" alt="Aviation Maintenance Training" style="width: 100%; border-radius: 8px; margin-top: 10px; margin-bottom: 15px;">
+          <a href="AMT_Curriculum_Organized_View.pdf" download style="display: block; text-decoration: none;">
+            <button>Download Curriculum</button>
+          </a>
+        </div>
+      </div>
+
+      <div id="amt" class="page">
+        <h2>Aviation Maintenance Technology (AMT)</h2>
+        <p>This 2-year program prepares students for careers in aircraft maintenance, repair, and overhaul (MRO). The curriculum covers airframe, powerplant, and essential aviation safety protocols.</p>
+        <h3>Career Opportunities</h3>
+        <ul>
+          <li>Aircraft Maintenance Technician (Licensed/Non-licensed)</li>
+          <li>MRO Facility Maintenance Specialist</li>
+          <li>Aviation Ground Support Equipment Mechanic</li>
+          <li>Quality Control Inspector in Aviation</li>
+          <li>Aircraft Assembly Technician</li>
+        </ul>
+        
+        <div style="margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px;">
+          <h3>Aviation Maintenance Curriculum</h3>
+          <img src="https://res.cloudinary.com/dmpjxqinh/image/upload/q_auto/f_auto/v1779770547/Code_Generated_Image_h0jjb6.png" alt="Aviation Maintenance Training" style="width: 100%; border-radius: 8px; margin-top: 10px; margin-bottom: 15px;">
+          <a href="AMT_Curriculum_Organized_View.pdf" download style="display: block; text-decoration: none;">
+            <button>Download Curriculum</button>
+          </a>
+        </div>
+        
+        <div style="margin-top: 20px;">
+          <button onclick="showPage('academics', 'link-academics')">Back to Academics</button>
+        </div>
+      </div>
+
+      <div id="avionics" class="page">
+        <h2>Aviation Electronics Technology (Avionics)</h2>
+        <p>Coming Soon.</p>
+        <button onclick="showPage('home', 'link-home')">Back to Home</button>
+      </div>
+
+      <div id="admissions" class="page">
+        <h2>ADMISSIONS PROCESS</h2>
+        <p>We are now accepting applicants for the upcoming academic year. Join our growing community of aviation professionals.</p>
+        <div class="card">
+          <h3>Requirements</h3>
+          <ul>
+            <li>Form 138 (Report Card)</li>
+            <li>Certificate of Good Moral Character</li>
+            <li>PSA Birth Certificate</li>
+            <li>2x2 ID Pictures (4 copies)</li>
+          </ul>
+        </div>
+        <h3>Apply Online</h3>
+        <form id="admissionsForm" class="card" action="https://formspree.io/f/mqejlzlq" method="POST">
+          <input type="text" name="prefix" placeholder="Prefix (e.g. Mr./Ms.)" />
+          <input type="text" name="first_name" placeholder="First Name" required />
+          <input type="text" name="middle_initial" placeholder="Middle Initial" />
+          <input type="text" name="last_name" placeholder="Last Name" required />
+          <select name="status" required>
+            <option value="" disabled selected>Freshmen/Transferee</option>
+            <option>Freshmen</option>
+            <option>Transferee</option>
+          </select>
+          <input type="text" name="highschool" placeholder="High School" required />
+          <input type="text" name="college" placeholder="College (if applicable)" />
+          <input type="text" name="address" placeholder="Address" required />
+          <input type="tel" name="phone" placeholder="Phone Number" required />
+          <input type="email" name="email" placeholder="Email Address" required />
+          <select name="program" required>
+            <option value="" disabled selected>Select Program</option>
+            <option>Aviation Maintenance Technology</option>
+            <option>Aviation Electronics Technology</option>
+          </select>
+          <select name="payment" required>
+            <option value="" disabled selected>Payment Option</option>
+            <option>Cash</option>
+            <option>Bank</option>
+          </select>
+          <button type="submit">Enroll</button>
+        </form>
+      </div>
+
+      <div id="portal" class="page">
+        <h2>STUDENT PORTAL</h2>
+        
+        <!-- Student Login / Registration View -->
+        <div id="student-portal-view">
+          <div id="login-section">
+            <p>Log in to access your grades, schedule, and internal announcements.</p>
+            <form class="card" onsubmit="event.preventDefault(); handleStudentLogin();">
+              <input type="text" id="uid" placeholder="Student ID" required />
+              <input type="password" id="pass" placeholder="Password" required />
+              <button type="submit">Login</button>
+            </form>
+            <p style="text-align: center; margin-top: 15px;">
+              Don't have an account? <a href="#" onclick="event.preventDefault(); document.getElementById('login-section').style.display='none'; document.getElementById('register-section').style.display='block';">Create Account</a>
+            </p>
+          </div>
+
+          <div id="register-section" style="display: none;">
+            <p>Create an account to gain access to the student portal services.</p>
+            <form class="card" onsubmit="event.preventDefault(); handleStudentRegister(this);">
+              <input type="text" id="reg-uid" placeholder="Student ID" required />
+              <input type="text" id="reg-name" placeholder="Full Name" required />
+              <input type="email" id="reg-email" placeholder="Email Address" required />
+              <input type="password" id="reg-pass" placeholder="Password" required />
+              <input type="password" id="reg-confirm" placeholder="Confirm Password" required />
+              <button type="submit">Register</button>
+            </form>
+            <p style="text-align: center; margin-top: 15px;">
+              Already have an account? <a href="#" onclick="event.preventDefault(); document.getElementById('register-section').style.display='none'; document.getElementById('login-section').style.display='block';">Back to Login</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Admin / Teacher Section -->
+        <div id="admin-portal-view" style="display: none;">
+          <div id="admin-login-section">
+            <h3>Administration Access</h3>
+            <p>Log in with your administrator or instructor credentials.</p>
+            <form class="card" onsubmit="event.preventDefault(); handleAdminLogin();">
+              <input type="text" id="admin-user" placeholder="Username / Admin ID" required />
+              <input type="password" id="admin-pass" placeholder="Password" required />
+              <button type="submit">Login as Admin</button>
+            </form>
+            <p style="text-align: center; margin-top: 15px;">
+              <a href="#" onclick="event.preventDefault(); switchPortalView('student');">Back to Student Login</a>
+            </p>
+          </div>
+
+          <!-- Admin Panel Dashboard -->
+          <div id="admin-dashboard-section" style="display: none;">
+            <div class="card">
+              <h3>Welcome to the Control Panel</h3>
+              <p>Manage accounts and edit grade sheets dynamic local storage.</p>
+              <button onclick="handleAdminLogout()" style="background: #dc3545; max-width: 150px; padding: 8px; font-size: 0.9rem; margin-bottom: 20px;">Logout Dashboard</button>
+              
+              <h3>Registered Student Accounts</h3>
+              <div style="overflow-x: auto;">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Student ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-accounts-tbody">
+                    <!-- Loaded dynamically via LocalStorage -->
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 style="margin-top:30px;">Add New Individual Entry</h3>
+              <p>Publish an individual grade profile directly into the local ledger matrix below.</p>
+              <form id="grade-upload-form" onsubmit="event.preventDefault(); handleTeacherGradeUpload();" style="border: 1px solid #ccc; padding: 15px; border-radius: 4px; background: #fff;">
+                <input type="text" id="grade-student-id" placeholder="Student ID (e.g., AMT1)" required />
+                <input type="text" id="grade-subject" placeholder="Subject Name / Code" required />
+                <input type="text" id="grade-value" placeholder="Grade Rating (e.g., 1.5, 92%, Passed)" required />
+                <button type="submit" style="background: #28a745;">Publish Grade Entry</button>
+              </form>
+
+              <!-- LIVE SPREADSHEET EDITOR INTERFACE -->
+              <h3 style="margin-top:40px;">Current Local Database Records (Editable Spreadsheet)</h3>
+              <p style="font-size: 0.85rem; color: #555;">Teachers can edit values directly inside the sheet matrix cells below. Remember to hit save when finished.</p>
+              <div style="overflow-x: auto;">
+                <table class="admin-table" id="spreadsheet-table">
+                  <thead>
+                    <tr>
+                      <th>Student ID</th>
+                      <th>Subject</th>
+                      <th>Grade Record</th>
+                      <th style="width: 90px; text-align: center;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-grades-tbody">
+                    <!-- Loaded dynamically via spreadsheet engine -->
+                  </tbody>
+                </table>
+              </div>
+              <div style="margin-top: 15px; display: flex; gap: 10px;">
+                <button onclick="saveSpreadsheetData()" style="background: #0056b3;">Save Grid Changes</button>
+                <button onclick="addNewSpreadsheetRow()" style="background: #6c757d; max-width: 180px;">+ Add Empty Row</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Discreet link at the bottom of the portal page -->
+        <span id="discreet-admin-trigger" class="discreet-link" onclick="switchPortalView('admin')">Admin / Teacher Access</span>
+      </div>
+
+      <div id="grades" class="page">
+        <h2>STUDENT GRADES</h2>
+        
+        <!-- Live Personal Dynamic Local Grades Block -->
+        <div class="card" style="margin-bottom: 25px;">
+          <h3>Your Live Subject Evaluations</h3>
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Evaluated Grade Status</th>
+                </tr>
+              </thead>
+              <tbody id="student-personal-grades-tbody">
+                <tr>
+                  <td colspan="2" style="text-align: center; color: #777;">No local custom updates recorded yet. Viewing master directory matrix sheet underneath.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden; height: 500px;">
+          <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQgf2yXtgUmLz75l1h7li8_OngScybSclUoxYRsf0KSFJU4GYdv-1bXBL9yEpptslcDj0hwkO4WLblr/pubhtml" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+        <div style="margin-top: 15px;">
+          <button onclick="showPage('portal', 'link-portal')">Back to Portal Dashboard</button>
+        </div>
+      </div>
+
+      <div id="directory" class="page">
+        <h2>DIRECTORY</h2>
+        <div class="card">
+          <h3>Administrative</h3>
+          <div class="dir-grid">
+            <div class="dir-card">
+              <div class="dir-icon"><i data-lucide="shield-check"></i></div>
+              <div class="dir-info">
+                <h4>Luz A. Martinez</h4>
+                <p>Accountable Manager</p>
+              </div>
+            </div>
+            <div class="dir-card">
+              <div class="dir-icon"><i data-lucide="clipboard-list"></i></div>
+              <div class="dir-info">
+                <h4>Minette Coleen G. Pastoril</h4>
+                <p>Registrar</p>
+              </div>
+            </div>
+            <div class="dir-card">
+              <div class="dir-icon"><i data-lucide="users"></i></div>
+              <div class="dir-info">
+                <h4>Angelica A. Villarin</h4>
+                <p>Human Resource</p>
+              </div>
+            </div>
+            <div class="dir-card">
+              <div class="dir-icon"><i data-lucide="heart-handshake"></i></div>
+              <div class="dir-info">
+                <h4>Angelica A. Villarin</h4>
+                <p>Guidance Counselor</p>
+              </div>
+            </div>
+          </div>
+          <h3>Training Department</h3>
+          <div class="dir-grid">
+            <div class="dir-card">
+              <div class="dir-icon"><i data-lucide="graduation-cap"></i></div>
+              <div class="dir-info">
+                <h4>Alan M. Martinez</h4>
+                <p>Head of Training</p>
+              </div>
+            </div>
+            <div class="dir-card">
+              <div class="dir-icon"><i data-lucide="check-circle"></i></div>
+              <div class="dir-info">
+                <h4>Oliver A. Velasco</h4>
+                <p>Quality Safety Manager</p>
+              </div>
+            </div>
+          </div>
+          <div class="instructor-group">
+            <h4>Technical Instructors</h4>
+            <div class="instructor-item">Bernard Y. Larot</div>
+            <div class="instructor-item">James Jacob Pancho</div>
+            <div class="instructor-item">Nathan Jithru R. Sorronda</div>
+            <div class="instructor-item">Mark Angelou A. Bilas</div>
+            <div class="instructor-item">Julius C. Cañizar</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="campus" class="page">
+        <h2>CAMPUS & COMMUNITY</h2>
+        <p>Experience life at Mindanao College of Aeronautics Inc. Our campus is designed to provide a comprehensive learning environment, combining theoretical knowledge with practical, hands-on experience.</p>
+        
+        <div class="campus-section">
+          <h3>Campus Facilities</h3>
+          <ul>
+            <li><strong>Aviation Maintenance Hangar:</strong> Fully equipped for hands-on airframe and powerplant training.</li>
+            <li><strong>Technical Library:</strong> Extensive collection of aviation manuals, regulations, and reference materials.</li>
+            <li><strong>Modern Classrooms:</strong> Air-conditioned spaces integrated with multimedia learning tools.</li>
+            <li><strong>Student Lounge:</strong> A dedicated space for students to relax, collaborate, and study.</li>
+          </ul>
+          <img src="https://res.cloudinary.com/dmpjxqinh/image/upload/q_auto/f_auto/v1780675183/IMG_9631_jr3qbn.jpg" alt="Mindanao College of Aeronautics Campus Environment" style="width: 100%; border-radius: 8px; margin-top: 15px;">
+        </div>
+
+        <div class="campus-section">
+          <h3>Student Life & Organizations</h3>
+          <p>At MCAI, we believe in shaping well-rounded aviation professionals. Students are encouraged to participate in various extracurricular activities to develop leadership, teamwork, and technical skills.</p>
+          <ul>
+            <li><strong>Aviation Mechanics Club:</strong> Engage in supplementary technical workshops and collaborative projects.</li>
+            <li><strong>Student Council:</strong> Represent the student body and organize campus-wide events and initiatives.</li>
+            <li><strong>PAF-ROTC Unit:</strong> Develop discipline, leadership, and a commitment to national service through our Philippine Air Force affiliated program.</li>
+          </ul>
+          <img src="https://res.cloudinary.com/dmpjxqinh/image/upload/q_auto/f_auto/v1780679786/IMG_2455_dlsq0k.jpg" alt="PAF-ROTC Unit Training and Formations" style="width: 100%; border-radius: 8px; margin-top: 15px;">
+        </div>
+
+        <div class="campus-section">
+          <h3>Community Outreach & Industry Exposure</h3>
+          <p>Industry exposure plays a key role in preparing our students for dynamic aviation careers. Our students actively participate in real-world technical events and site deployments to gain critical operations insights.</p>
+          <div style="margin-top: 15px;">
+            <h4>Aerotour 2025 — Mactan-Cebu International Airport</h4>
+            
+            <img src="https://res.cloudinary.com/dmpjxqinh/image/upload/q_auto/f_auto/v1780664419/IMG_6140_md97ck.jpg" alt="Aerotour 2025 General Aviation Area Aplus exposure" style="width: 100%; border-radius: 8px; margin-top: 10px; margin-bottom: 5px;">
+            <p style="margin-top: 0; margin-bottom: 20px;">Students received direct technical exposure at the General Aviation Area (Aplus facility), checking actual operational workflows and ground support setups.</p>
+            
+            <img src="https://res.cloudinary.com/dmpjxqinh/image/upload/q_auto/f_auto/v1780676950/IMG_6460_f60uav.jpg" alt="Students exploring emergency air transport service rotary wing aircraft" style="width: 100%; border-radius: 8px; margin-top: 10px; margin-bottom: 5px;">
+            <p style="margin-top: 0;">As part of this comprehensive field evaluation at the general aviation area, students closely explored emergency air transport service rotary wing aircraft to study their specialized engineering frameworks, safety protocols, and rapid-response mechanisms.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="full">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <img src="https://res.cloudinary.com/dmpjxqinh/image/upload/q_auto/f_auto/v1779550423/Untitled_design_2_ldqqns.png" alt="MCAI Logo" style="max-width: 80px;">
+      </div>
+      <div class="footer-content">
+        <div class="footer-item">
+          <i data-lucide="phone"></i>
+          <span>(0995) 589 0260</span>
+        </div>
+        <div class="footer-item">
+          <i data-lucide="map-pin"></i>
+          <span>Bolicon, Turno, Dipolog City</span>
+        </div>
+        <div class="footer-item">
+          <i data-lucide="mail"></i>
+          <span>mcaeronautics@proton.me</span>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        &copy; 2026 Mindanao College of Aeronautics Incorporated. All rights reserved.
+      </div>
+    </footer>
+
+    <script>
+      lucide.createIcons();
+
+      // Database Setup Initialization inside Client browser localStorage
+      if (!localStorage.getItem('mcai_students')) {
+        const defaultStudents = [
+          { uid: 'AMT1', name: 'Default Student', email: 'student@mcai.edu.ph', pass: '2024-001' }
+        ];
+        localStorage.setItem('mcai_students', JSON.stringify(defaultStudents));
+      }
+      if (!localStorage.getItem('mcai_grades')) {
+        const defaultGrades = [
+          { uid: 'AMT1', subject: 'Airframe Systems I', grade: '1.25' },
+          { uid: 'AMT1', subject: 'Powerplant Theory', grade: '1.50' }
+        ];
+        localStorage.setItem('mcai_grades', JSON.stringify(defaultGrades));
+      }
+
+      function showPage(pageId, linkId) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
+        const targetPage = document.getElementById(pageId);
+        if (targetPage) targetPage.classList.add('active');
+
+        if (linkId) {
+          const targetLink = document.getElementById(linkId);
+          if (targetLink) targetLink.classList.add('active');
+        }
+
+        const sidebar = document.getElementById('sidebar');
+        if (!sidebar.classList.contains('hidden')) {
+          toggleSidebar();
+        }
+      }
+
+      function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const main = document.getElementById('main');
+        const footer = document.getElementById('footer');
+        const btn = document.getElementById('toggle-btn');
+
+        sidebar.classList.toggle('hidden');
+        main.classList.toggle('full');
+        footer.classList.toggle('full');
+        btn.classList.toggle('shifted');
+
+        btn.innerHTML = sidebar.classList.contains('hidden') ? '<i data-lucide="menu"></i>' : '<i data-lucide="x"></i>';
+        lucide.createIcons();
+      }
+
+      document.getElementById('admissionsForm').addEventListener('submit', function() {
+        setTimeout(() => {
+          this.reset();
+        }, 500);
+      });
+
+      window.addEventListener('scroll', () => {
+        const sidebar = document.getElementById('sidebar');
+        if (!sidebar.classList.contains('hidden') && window.scrollY > 50) {
+          toggleSidebar();
+        }
+      });
+
+      /* Switch display between Student Portal and Admin Login views */
+      function switchPortalView(viewType) {
+        if (viewType === 'student') {
+          document.getElementById('student-portal-view').style.display = 'block';
+          document.getElementById('admin-portal-view').style.display = 'none';
+          document.getElementById('discreet-admin-trigger').style.display = 'block';
+        } else {
+          document.getElementById('student-portal-view').style.display = 'none';
+          document.getElementById('admin-portal-view').style.display = 'block';
+          document.getElementById('discreet-admin-trigger').style.display = 'none';
+        }
+      }
+
+      /* Student Account Validation with Local Database Lookup */
+      function handleStudentLogin() {
+        const inputId = document.getElementById('uid').value;
+        const inputPass = document.getElementById('pass').value;
+        
+        const students = JSON.parse(localStorage.getItem('mcai_students'));
+        const matchedUser = students.find(s => s.uid === inputId && s.pass === inputPass);
+
+        if (matchedUser) {
+          renderStudentPersonalGrades(inputId);
+          showPage('grades', null);
+        } else {
+          alert('Invalid Student Credentials');
+        }
+      }
+
+      /* Student Registration Action handling */
+      function handleStudentRegister(formElement) {
+        const id = document.getElementById('reg-uid').value;
+        const name = document.getElementById('reg-name').value;
+        const email = document.getElementById('reg-email').value;
+        const pass = document.getElementById('reg-pass').value;
+        const confirm = document.getElementById('reg-confirm').value;
+
+        if (pass !== confirm) {
+          alert('Passwords do not match.');
+          return;
+        }
+
+        let students = JSON.parse(localStorage.getItem('mcai_students'));
+        if (students.some(s => s.uid === id)) {
+          alert('Student ID already exists.');
+          return;
+        }
+
+        students.push({ uid: id, name: name, email: email, pass: pass });
+        localStorage.setItem('mcai_students', JSON.stringify(students));
+
+        alert('Account registration successful! You can now log in.');
+        document.getElementById('register-section').style.display = 'none';
+        document.getElementById('login-section').style.display = 'block';
+        formElement.reset();
+        
+        if(document.getElementById('admin-dashboard-section').style.display === 'block') {
+          refreshAdminTables();
+        }
+      }
+
+      /* Administrator Security Login Authentication */
+      function handleAdminLogin() {
+        const user = document.getElementById('admin-user').value;
+        const pass = document.getElementById('admin-pass').value;
+
+        if (user === 'admin' && pass === 'admin123') {
+          document.getElementById('admin-login-section').style.display = 'none';
+          document.getElementById('admin-dashboard-section').style.display = 'block';
+          refreshAdminTables();
+        } else {
+          alert('Unauthorized admin credentials.');
+        }
+      }
+
+      function handleAdminLogout() {
+        document.getElementById('admin-dashboard-section').style.display = 'none';
+        document.getElementById('admin-login-section').style.display = 'block';
+        document.getElementById('admin-user').value = '';
+        document.getElementById('admin-pass').value = '';
+        switchPortalView('student');
+      }
+
+      /* Admin Board Roster Management updates UI */
+      function refreshAdminTables() {
+        const students = JSON.parse(localStorage.getItem('mcai_students'));
+        
+        // Load Student Accounts List
+        const accountsTbody = document.getElementById('admin-accounts-tbody');
+        accountsTbody.innerHTML = '';
+        students.forEach(s => {
+          const row = `<tr><td>${s.uid}</td><td>${s.name}</td><td>${s.email}</td></tr>`;
+          accountsTbody.innerHTML += row;
+        });
+
+        // Initialize/Render the Spreadsheet Editor View
+        renderSpreadsheet();
+      }
+
+      /* RENDER SPREADSHEET ENGINE MATRIX */
+      function renderSpreadsheet() {
+        const grades = JSON.parse(localStorage.getItem('mcai_grades')) || [];
+        const gradesTbody = document.getElementById('admin-grades-tbody');
+        gradesTbody.innerHTML = '';
+
+        if (grades.length === 0) {
+          gradesTbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#888;">Spreadsheet is empty. Click "+ Add Empty Row" to begin.</td></tr>`;
+          return;
+        }
+
+        grades.forEach((g, index) => {
+          const row = document.createElement('tr');
+          row.className = 'spreadsheet-row';
+          row.innerHTML = `
+            <td><input type="text" class="spreadsheet-input row-uid" value="${g.uid || ''}" placeholder="e.g. AMT1"></td>
+            <td><input type="text" class="spreadsheet-input row-subject" value="${g.subject || ''}" placeholder="Subject Code"></td>
+            <td><input type="text" class="spreadsheet-input row-grade" value="${g.grade || ''}" placeholder="Grade Rating"></td>
+            <td style="text-align: center;">
+              <button class="delete-row-btn" onclick="removeSpreadsheetRow(${index})">Delete</button>
+            </td>
+          `;
+          gradesTbody.appendChild(row);
+        });
+      }
+
+      /* Append blank entry array row element into working table buffer */
+      function addNewSpreadsheetRow() {
+        const gradesTbody = document.getElementById('admin-grades-tbody');
+        
+        // Clear empty placeholder if it exists
+        if (localStorage.getItem('mcai_grades') === '[]' || !localStorage.getItem('mcai_grades')) {
+          gradesTbody.innerHTML = '';
+        }
+
+        const row = document.createElement('tr');
+        row.className = 'spreadsheet-row';
+        row.innerHTML = `
+          <td><input type="text" class="spreadsheet-input row-uid" value="" placeholder="e.g. AMT1"></td>
+          <td><input type="text" class="spreadsheet-input row-subject" value="" placeholder="Subject Code"></td>
+          <td><input type="text" class="spreadsheet-input row-grade" value="" placeholder="Grade Rating"></td>
+          <td style="text-align: center;">
+            <button class="delete-row-btn" onclick="this.closest('tr').remove()">Delete</button>
+          </td>
+        `;
+        gradesTbody.appendChild(row);
+      }
+
+      /* Extract current input field conditions and sync array directly to local Storage */
+      function saveSpreadsheetData() {
+        const rows = document.querySelectorAll('.spreadsheet-row');
+        const updatedGrades = [];
+
+        rows.forEach(row => {
+          const uid = row.querySelector('.row-uid').value.trim();
+          const subject = row.querySelector('.row-subject').value.trim();
+          const grade = row.querySelector('.row-grade').value.trim();
+
+          // Save row if at least one field has data
+          if (uid || subject || grade) {
+            updatedGrades.push({ uid: uid, subject: subject, grade: grade });
+          }
+        });
+
+        localStorage.setItem('mcai_grades', JSON.stringify(updatedGrades));
+        alert('Spreadsheet modifications saved successfully!');
+        renderSpreadsheet();
+      }
+
+      /* Remove target index instantly out of temporary database array */
+      function removeSpreadsheetRow(index) {
+        let grades = JSON.parse(localStorage.getItem('mcai_grades')) || [];
+        grades.splice(index, 1);
+        localStorage.setItem('mcai_grades', JSON.stringify(grades));
+        renderSpreadsheet();
+      }
+
+      /* Instructor Grade Registry Form addition */
+      function handleTeacherGradeUpload() {
+        const stId = document.getElementById('grade-student-id').value.trim();
+        const subject = document.getElementById('grade-subject').value.trim();
+        const gradeValue = document.getElementById('grade-value').value.trim();
+
+        let grades = JSON.parse(localStorage.getItem('mcai_grades')) || [];
+        grades.push({ uid: stId, subject: subject, grade: gradeValue });
+        localStorage.setItem('mcai_grades', JSON.stringify(grades));
+
+        alert('Grade profile successfully committed to spreadsheet array!');
+        document.getElementById('grade-upload-form').reset();
+        renderSpreadsheet();
+      }
+
+      /* Student Output Display Evaluation generation */
+      function renderStudentPersonalGrades(studentId) {
+        const grades = JSON.parse(localStorage.getItem('mcai_grades')) || [];
+        const filtered = grades.filter(g => g.uid === studentId);
+        const container = document.getElementById('student-personal-grades-tbody');
+
+        if (filtered.length > 0) {
+          container.innerHTML = '';
+          filtered.forEach(g => {
+            const row = `<tr><td><strong>${g.subject}</strong></td><td><span style="color:var(--secondary);font-weight:bold;">${g.grade}</span></td></tr>`;
+            container.innerHTML += row;
+          });
+        } else {
+          container.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #777;">No local dynamic grading entries logged yet. View institutional sheet underneath.</td></tr>`;
+        }
+      }
+    </script>
+  </body>
+</html>
